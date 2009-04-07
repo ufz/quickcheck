@@ -33,9 +33,9 @@
 
 - \ref introduction
   - \ref what
-  - \ref why
-  - \ref why2
-  - \ref how
+  - \ref why "Why Should I Use It?"
+  - \ref why2 "Why Would I Want to Use It?"
+  - \ref how "How to Get It?"
   - \ref relation
   - \ref license
 - \ref using
@@ -50,6 +50,10 @@
   - \ref printing
   - \ref verbose
   - \ref fixed
+- \ref how2
+  - \ref test
+  - \ref code
+  - \ref promote
 
 \section introduction Introduction
 
@@ -673,6 +677,35 @@ The element type of this vector is the 5-tuple quickcheck::Property::Input
 which has fields \c a, \c b, \c c, \c d and \c e corresponding respectively to
 first, second, third, fourth and fifth arguments. When your property has less
 than 5 arguments, simply set unused fields to quickcheck::UNIT.
+
+\section how2 How to Contribute?
+
+\subsection test Test
+
+We are interested in feedback about utility of QuickCheck++ and its design. If
+you have time to give it a try, and you think something is great/stupid/could
+be improved, let us know.
+
+You can contact us by mail at the address mentioned in the source or just drop
+a comment on <a
+href="http://devmusings.legiasoft.com/quickcheck-like-framework-for-cpp">our
+blog</a>.
+
+\subsection code Code
+
+QuickCheck++ is currently just a quick hack by a non-expert C++ programmer.
+Code can be improved, and it should surely be extended to make the framework
+more complete.
+
+If you like QuickCheck++ and you got some spare time (or if you had to
+implement things for your own use), we're gladly accepting patches (send them
+to the address mentioned in the source).
+
+\subsection promote Promote
+
+If you think QuickCheck++ is great, tell others about it. The more people know
+about the framework, the more people may find it useful and the more useful it
+becomes!
 */
 
 #ifndef QUICKCHECK_QUICKCHECK_H
