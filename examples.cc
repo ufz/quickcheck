@@ -17,6 +17,7 @@
  * QuickCheck++. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -207,6 +208,20 @@ class PBottom : public Property<int> {
    }
 };
 
+static unsigned iterativeSquare(unsigned n)
+{
+   unsigned res = 0;
+   for (unsigned i = 0; i < n; ++i)
+      res += n;
+   return res;
+}
+
+class PSquareDivisibleByRoot : public Property<unsigned> {
+   bool holdsFor(const unsigned& i) {
+      return unsigned(sqrt(iterativeSquare(i))) == i;
+   }
+};
+
 int main()
 {
    PReverseCancelsReverse revRev;
@@ -234,6 +249,11 @@ int main()
 
    PInsertKeepsSorted5 insertKeepsSorted5;
    insertKeepsSorted5.check();
+
+   PSquareDivisibleByRoot squareDivisibleByRoot;
+   squareDivisibleByRoot.check();
+   squareDivisibleByRoot.addFixed(std::numeric_limits<unsigned>::max());
+   squareDivisibleByRoot.check();
 
    check<PReverseCancelsReverse>("that reverse cancels reverse");
    check<PReverseCancelsReverse>("that reverse cancels reverse", 200);

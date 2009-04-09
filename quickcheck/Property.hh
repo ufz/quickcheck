@@ -110,6 +110,22 @@ class PropertyBase {
       bool check(size_t n = 100, size_t max = 0, bool isVerbose = false,
                  std::ostream& out = std::cout);
 
+   protected:
+
+      /**
+       * Adds a fixed test case for with the given arguments. This function
+       * allows to ensure that some carefully chosen test cases will be checked
+       * in addition to the randomly-generated ones.
+       *
+       * \param a the first argument of the test case
+       * \param b the second argument of the test case
+       * \param c the third argument of the test case
+       * \param d the fourth argument of the test case
+       * \param e the fifth argument of the test case
+       */
+      void _addFixed(const A& a, const B& b, const C& c, const D& d,
+                     const E& e);
+
    private:
 
       /**
@@ -214,8 +230,6 @@ class PropertyBase {
        */
       virtual bool _isTrivialFor(const A& a, const B& b, const C& c,
                                  const D& d, const E& e) = 0;
-
-   protected:
 
       /**
        * A vector of fixed inputs that are tested in addition to
@@ -331,6 +345,14 @@ bool PropertyBase<A, B, C, D, E>::check(size_t n, size_t max, bool isVerbose,
 }
 
 template<class A, class B, class C, class D, class E>
+void PropertyBase<A, B, C, D, E>::_addFixed(const A& a, const B& b, const C& c,
+                                            const D& d, const E& e)
+{
+   Input i = { a, b, c, d, e };
+   _fixedInputs.push_back(i);
+}
+
+template<class A, class B, class C, class D, class E>
 void PropertyBase<A, B, C, D, E>::printInput(std::ostream& out, const A& a,
                                              const B& b, const C& c,
                                              const D& d, const E& e)
@@ -380,6 +402,22 @@ size_t PropertyBase<A, B, C, D, E>::sizeHint(size_t testNo)
 template<class A, class B = Unit, class C = Unit, class D = Unit,
          class E = Unit>
 class Property : public PropertyBase<A, B, C, D, E> {
+
+   public:
+
+   /**
+    * \copybrief PropertyBase::_addFixed
+    *
+    * \param a the first argument of the test case
+    * \param b the second argument of the test case
+    * \param c the third argument of the test case
+    * \param d the fourth argument of the test case
+    * \param e the fifth argument of the test case
+    */
+   virtual void addFixed(const A& a, const B& b, const C& c, const D& d,
+                         const E& e);
+
+   private:
 
    /**
     * Tells whether or not this property should accept given arguments. This
@@ -506,6 +544,13 @@ class Property : public PropertyBase<A, B, C, D, E> {
 };
 
 template<class A, class B, class C, class D, class E>
+void Property<A, B, C, D, E>::addFixed(const A& a, const B& b, const C& c,
+                                       const D& d, const E& e)
+{
+   _addFixed(a, b, c, d, e);
+}
+
+template<class A, class B, class C, class D, class E>
 bool Property<A, B, C, D, E>::accepts(const A&, const B&, const C&, const D&,
                                       const E&)
 {
@@ -583,6 +628,22 @@ bool Property<A, B, C, D, E>::_isTrivialFor(const A& a, const B& b, const C& c,
  */
 template<class A, class B, class C, class D>
 class Property<A, B, C, D> : public PropertyBase<A, B, C, D, Unit> {
+
+   public:
+
+   /**
+    * \copybrief Property::addFixed
+    *
+    * 4-argument counterpart of Property::addFixed.
+    *
+    * \param a the first argument of the test case
+    * \param b the second argument of the test case
+    * \param c the third argument of the test case
+    * \param d the fourth argument of the test case
+    */
+   virtual void addFixed(const A& a, const B& b, const C& c, const D& d);
+
+   private:
 
    /**
     * \copybrief Property::accepts
@@ -663,6 +724,13 @@ class Property<A, B, C, D> : public PropertyBase<A, B, C, D, Unit> {
 };
 
 template<class A, class B, class C, class D>
+void Property<A, B, C, D>::addFixed(const A& a, const B& b, const C& c,
+                                    const D& d)
+{
+   _addFixed(a, b, c, d, UNIT);
+}
+
+template<class A, class B, class C, class D>
 bool Property<A, B, C, D>::accepts(const A&, const B&, const C&, const D&)
 {
    return true;
@@ -737,6 +805,21 @@ bool Property<A, B, C, D>::_isTrivialFor(const A& a, const B& b, const C& c,
 template<class A, class B, class C>
 class Property<A, B, C> : public PropertyBase<A, B, C, Unit, Unit> {
 
+   public:
+
+   /**
+    * \copybrief Property::addFixed
+    *
+    * 3-argument counterpart of Property::addFixed.
+    *
+    * \param a the first argument of the test case
+    * \param b the second argument of the test case
+    * \param c the third argument of the test case
+    */
+   virtual void addFixed(const A& a, const B& b, const C& c);
+
+   private:
+
    /**
     * \copybrief Property::accepts
     *
@@ -810,6 +893,12 @@ class Property<A, B, C> : public PropertyBase<A, B, C, Unit, Unit> {
 };
 
 template<class A, class B, class C>
+void Property<A, B, C>::addFixed(const A& a, const B& b, const C& c)
+{
+   _addFixed(a, b, c, UNIT, UNIT);
+}
+
+template<class A, class B, class C>
 bool Property<A, B, C>::accepts(const A&, const B&, const C&)
 {
    return true;
@@ -880,6 +969,20 @@ bool Property<A, B, C>::_isTrivialFor(const A& a, const B& b, const C& c,
 template<class A, class B>
 class Property<A, B> : public PropertyBase<A, B, Unit, Unit, Unit> {
 
+   public:
+
+   /**
+    * \copybrief Property::addFixed
+    *
+    * 2-argument counterpart of Property::addFixed.
+    *
+    * \param a the first argument of the test case
+    * \param b the second argument of the test case
+    */
+   virtual void addFixed(const A& a, const B& b);
+
+   private:
+
    /**
     * \copybrief Property::accepts
     *
@@ -946,6 +1049,12 @@ class Property<A, B> : public PropertyBase<A, B, Unit, Unit, Unit> {
                       const Unit& e);
 
 };
+
+template<class A, class B>
+void Property<A, B>::addFixed(const A& a, const B& b)
+{
+   _addFixed(a, b, UNIT, UNIT, UNIT);
+}
 
 template<class A, class B>
 bool Property<A, B>::accepts(const A&, const B&)
@@ -1015,6 +1124,19 @@ bool Property<A, B>::_isTrivialFor(const A& a, const B& b, const Unit&,
 template<class A>
 class Property<A> : public PropertyBase<A, Unit, Unit, Unit, Unit> {
 
+   public:
+
+   /**
+    * \copybrief Property::addFixed
+    *
+    * 1-argument counterpart of Property::addFixed.
+    *
+    * \param a the first argument of the test case
+    */
+   virtual void addFixed(const A& a);
+
+   private:
+
    /**
     * \copybrief Property::accepts
     *
@@ -1076,6 +1198,12 @@ class Property<A> : public PropertyBase<A, Unit, Unit, Unit, Unit> {
                       const Unit& e);
 
 };
+
+template<class A>
+void Property<A>::addFixed(const A& a)
+{
+   _addFixed(a, UNIT, UNIT, UNIT, UNIT);
+}
 
 template<class A>
 bool Property<A>::accepts(const A&)
