@@ -305,8 +305,8 @@ bool PropertyBase<A, B, C, D, E>::check(size_t n, size_t max, bool isVerbose,
             printInput(out, a, b, c, d, e);
          }
          if (!_holdsFor(a, b, c, d, e)) {
-            out << "Falsifiable after " << testNo + 1 << " tests for input:" <<
-               std::endl;
+            out << "Falsifiable after " << testNo + 1 << " tests for input:"
+               << std::endl;
             printInput(out, a, b, c, d, e);
             return false;
          }
@@ -338,8 +338,8 @@ bool PropertyBase<A, B, C, D, E>::check(size_t n, size_t max, bool isVerbose,
       }
       std::reverse(sorted.begin(), sorted.end());
       for (ClassVec::const_iterator i = sorted.begin(); i != sorted.end(); ++i)
-         out << std::setw(4) << i->first * 100 / testNo << "% " << i->second <<
-            std::endl;
+         out << std::setw(4) << i->first * 100 / testNo << "% " << i->second
+            << std::endl;
    }
    return (testNo == n);
 }
@@ -405,141 +405,145 @@ class Property : public PropertyBase<A, B, C, D, E> {
 
    public:
 
-   /**
-    * \copybrief PropertyBase::_addFixed
-    *
-    * \param a the first argument of the test case
-    * \param b the second argument of the test case
-    * \param c the third argument of the test case
-    * \param d the fourth argument of the test case
-    * \param e the fifth argument of the test case
-    */
-   virtual void addFixed(const A& a, const B& b, const C& c, const D& d,
-                         const E& e);
+      /**
+       * \copybrief PropertyBase::_addFixed
+       *
+       * \param a the first argument of the test case
+       * \param b the second argument of the test case
+       * \param c the third argument of the test case
+       * \param d the fourth argument of the test case
+       * \param e the fifth argument of the test case
+       */
+      virtual void addFixed(const A& a, const B& b, const C& c, const D& d,
+                            const E& e);
 
    private:
 
-   /**
-    * Tells whether or not this property should accept given arguments. This
-    * predicate is used to filter generated input arguments to respect this
-    * property possible precondition.
-    *
-    * Note that if too much inputs are rejected, the property may fail
-    * verification due to the impossibility to generate a sufficient number of
-    * valid inputs in the given number of attempts. If this occurs, you can
-    * augment the maximum number of allowed attempts when calling #check or
-    * define a custom generator #generateInput.
-    *
-    * Also pay attention to the fact that filtering input arguments may lead to
-    * a biased distribution which is not representative of the set of valid
-    * inputs. You should inspect your input distribution with #isTrivialFor or
-    * #classify when using this predicate and you will often do better by
-    * defining a custom generator by re-implementing #generateInput.
-    *
-    * \param a the first argument
-    * \param b the second argument
-    * \param c the third argument
-    * \param d the fourth argument
-    * \param e the fifth argument
-    *
-    * \return \c true if arguments forms valid input and \c false otherwise
-    */
-   virtual bool accepts(const A& a, const B& b, const C& c, const D& d,
-                        const E& e);
+      /**
+       * Tells whether or not this property should accept given arguments. This
+       * predicate is used to filter generated input arguments to respect this
+       * property possible precondition.
+       *
+       * Note that if too much inputs are rejected, the property may fail
+       * verification due to the impossibility to generate a sufficient number
+       * of valid inputs in the given number of attempts. If this occurs, you
+       * can augment the maximum number of allowed attempts when calling #check
+       * or define a custom generator #generateInput.
+       *
+       * Also pay attention to the fact that filtering input arguments may lead
+       * to a biased distribution which is not representative of the set of
+       * valid inputs. You should inspect your input distribution with
+       * #isTrivialFor or #classify when using this predicate and you will
+       * often do better by defining a custom generator by re-implementing
+       * #generateInput.
+       *
+       * \param a the first argument
+       * \param b the second argument
+       * \param c the third argument
+       * \param d the fourth argument
+       * \param e the fifth argument
+       *
+       * \return \c true if arguments forms valid input and \c false otherwise
+       */
+      virtual bool accepts(const A& a, const B& b, const C& c, const D& d,
+                           const E& e);
 
-   /**
-    * Classifies input to allow observation of input distribution. An input
-    * class is simply represented by a string which is used both as an input
-    * class identifier (\ie same class string means same input class)
-    * and as output to the user. The empty string "" is used as a no-class tag
-    * and is not printed in input distribution.
-    *
-    * \param a the first argument
-    * \param b the second argument
-    * \param c the third argument
-    * \param d the fourth argument
-    * \param e the fifth argument
-    *
-    * \return the input class associated to input or empty string "" if none
-    */
-   virtual const std::string classify(const A& a, const B& b, const C& c,
-                                      const D& d, const E& e);
+      /**
+       * Classifies input to allow observation of input distribution. An input
+       * class is simply represented by a string which is used both as an input
+       * class identifier (\ie same class string means same input class) and as
+       * output to the user. The empty string "" is used as a no-class tag and
+       * is not printed in input distribution.
+       *
+       * \param a the first argument
+       * \param b the second argument
+       * \param c the third argument
+       * \param d the fourth argument
+       * \param e the fifth argument
+       *
+       * \return the input class associated to input or empty string "" if none
+       */
+      virtual const std::string classify(const A& a, const B& b, const C& c,
+                                         const D& d, const E& e);
 
-   /**
-    * Generates input randomly. Override this method if you need a custom input
-    * generator.
-    *
-    * All input arguments given here are <em>out</em> values, \ie they can be
-    * assumed default or empty on entry and should be initialised to a sensible
-    * random value by this method.
-    *
-    * The size of generated values should be somehow correlated to the size
-    * hint \c n. When calling generators recursively to build compound data
-    * structures, you should pass a lower size hint to compound member
-    * generators to avoid the construction of overly large (or even infinite)
-    * data structures.
-    *
-    * The #quickcheck namespace contains a lot of generators that can be used
-    * to build your owns.
-    *
-    * \param n the size hint
-    * \param a the first argument
-    * \param b the second argument
-    * \param c the third argument
-    * \param d the fourth argument
-    * \param e the fifth argument
-    */
-   virtual void generateInput(size_t n, A& a, B& b, C& c, D& d, E& e);
+      /**
+       * Generates input randomly. Override this method if you need a custom
+       * input generator.
+       *
+       * All input arguments given here are <em>out</em> values, \ie they can
+       * be assumed default or empty on entry and should be initialised to a
+       * sensible random value by this method.
+       *
+       * The size of generated values should be somehow correlated to the size
+       * hint \c n. When calling generators recursively to build compound data
+       * structures, you should pass a lower size hint to compound member
+       * generators to avoid the construction of overly large (or even
+       * infinite) data structures.
+       *
+       * The #quickcheck namespace contains a lot of generators that can be
+       * used to build your owns.
+       *
+       * \param n the size hint
+       * \param a the first argument
+       * \param b the second argument
+       * \param c the third argument
+       * \param d the fourth argument
+       * \param e the fifth argument
+       */
+      virtual void generateInput(size_t n, A& a, B& b, C& c, D& d, E& e);
 
-   /**
-    * Tells whether or not this property holds for the given input. This method
-    * is the core of the property which define what the property is all about.
-    * If the code under test is correct, it should return \c true for all valid
-    * inputs. If the code under test is not correct, it should return \c false
-    * for at least some valid input.
-    *
-    * \param a the first argument
-    * \param b the second argument
-    * \param c the third argument
-    * \param d the fourth argument
-    * \param e the fifth argument
-    *
-    * \return \c true if the property holds for given input and \c false
-    * otherwise
-    */
-   virtual bool holdsFor(const A& a, const B& b, const C& c, const D& d,
-                         const E& e) = 0;
+      /**
+       * Tells whether or not this property holds for the given input. This
+       * method is the core of the property which define what the property is
+       * all about. If the code under test is correct, it should return \c true
+       * for all valid inputs. If the code under test is not correct, it should
+       * return \c false for at least some valid input.
+       *
+       * \param a the first argument
+       * \param b the second argument
+       * \param c the third argument
+       * \param d the fourth argument
+       * \param e the fifth argument
+       *
+       * \return \c true if the property holds for given input and \c false
+       * otherwise
+       */
+      virtual bool holdsFor(const A& a, const B& b, const C& c, const D& d,
+                            const E& e) = 0;
 
-   /**
-    * Tells whether or not the property is trivially true for the given input.
-    * This predicate allows to ensure that a sufficient number of tests were
-    * <em>interesting</em>. It is a restricted form of input classification.
-    *
-    * \see classify
-    *
-    * \param a the first argument
-    * \param b the second argument
-    * \param c the third argument
-    * \param d the fourth argument
-    * \param e the fifth argument
-    *
-    * \return \c true if the property is trivial for given input and \c false
-    * otherwise
-    */
-   virtual bool isTrivialFor(const A& a, const B& b, const C& c, const D& d,
-                             const E& e);
+      /**
+       * Tells whether or not the property is trivially true for the given
+       * input. This predicate allows to ensure that a sufficient number of
+       * tests were <em>interesting</em>. It is a restricted form of input
+       * classification.
+       *
+       * \see classify
+       *
+       * \param a the first argument
+       * \param b the second argument
+       * \param c the third argument
+       * \param d the fourth argument
+       * \param e the fifth argument
+       *
+       * \return \c true if the property is trivial for given input and \c
+       * false otherwise
+       */
+      virtual bool isTrivialFor(const A& a, const B& b, const C& c, const D& d,
+                                const E& e);
 
-   bool _accepts(const A& a, const B& b, const C& c, const D& d, const E& e);
+      bool _accepts(const A& a, const B& b, const C& c, const D& d,
+                    const E& e);
 
-   const std::string _classify(const A& a, const B& b, const C& c, const D& d,
-                               const E& e);
+      const std::string _classify(const A& a, const B& b, const C& c,
+                                  const D& d, const E& e);
 
-   void _generateInput(size_t n, A& a, B& b, C& c, D& d, E& e);
+      void _generateInput(size_t n, A& a, B& b, C& c, D& d, E& e);
 
-   bool _holdsFor(const A& a, const B& b, const C& c, const D& d, const E& e);
+      bool _holdsFor(const A& a, const B& b, const C& c, const D& d,
+                     const E& e);
 
-   bool _isTrivialFor(const A& a, const B& b, const C& c, const D& d,
-                      const E& e);
+      bool _isTrivialFor(const A& a, const B& b, const C& c, const D& d,
+                         const E& e);
 
 };
 
@@ -631,95 +635,97 @@ class Property<A, B, C, D> : public PropertyBase<A, B, C, D, Unit> {
 
    public:
 
-   /**
-    * \copybrief Property::addFixed
-    *
-    * 4-argument counterpart of Property::addFixed.
-    *
-    * \param a the first argument of the test case
-    * \param b the second argument of the test case
-    * \param c the third argument of the test case
-    * \param d the fourth argument of the test case
-    */
-   virtual void addFixed(const A& a, const B& b, const C& c, const D& d);
+      /**
+       * \copybrief Property::addFixed
+       *
+       * 4-argument counterpart of Property::addFixed.
+       *
+       * \param a the first argument of the test case
+       * \param b the second argument of the test case
+       * \param c the third argument of the test case
+       * \param d the fourth argument of the test case
+       */
+      virtual void addFixed(const A& a, const B& b, const C& c, const D& d);
 
    private:
 
-   /**
-    * \copybrief Property::accepts
-    *
-    * 4-argument counterpart of Property::accepts.
-    *
-    * \param a the first argument
-    * \param b the second argument
-    * \param c the third argument
-    * \param d the fourth argument
-    */
-   virtual bool accepts(const A& a, const B& b, const C& c, const D& d);
+      /**
+       * \copybrief Property::accepts
+       *
+       * 4-argument counterpart of Property::accepts.
+       *
+       * \param a the first argument
+       * \param b the second argument
+       * \param c the third argument
+       * \param d the fourth argument
+       */
+      virtual bool accepts(const A& a, const B& b, const C& c, const D& d);
 
-   /**
-    * \copybrief Property::classify
-    *
-    * 4-argument counterpart of Property::classify.
-    *
-    * \param a the first argument
-    * \param b the second argument
-    * \param c the third argument
-    * \param d the fourth argument
-    */
-   virtual const std::string classify(const A& a, const B& b, const C& c,
-                                      const D& d);
+      /**
+       * \copybrief Property::classify
+       *
+       * 4-argument counterpart of Property::classify.
+       *
+       * \param a the first argument
+       * \param b the second argument
+       * \param c the third argument
+       * \param d the fourth argument
+       */
+      virtual const std::string classify(const A& a, const B& b, const C& c,
+                                         const D& d);
 
-   /**
-    * \copybrief Property::generateInput
-    *
-    * 4-argument counterpart of Property::generateInput.
-    *
-    * \param n the size hint
-    * \param a the first argument
-    * \param b the second argument
-    * \param c the third argument
-    * \param d the fourth argument
-    */
-   virtual void generateInput(size_t n, A& a, B& b, C& c, D& d);
+      /**
+       * \copybrief Property::generateInput
+       *
+       * 4-argument counterpart of Property::generateInput.
+       *
+       * \param n the size hint
+       * \param a the first argument
+       * \param b the second argument
+       * \param c the third argument
+       * \param d the fourth argument
+       */
+      virtual void generateInput(size_t n, A& a, B& b, C& c, D& d);
 
-   /**
-    * \copybrief Property::holdsFor
-    *
-    * 4-argument counterpart of Property::holdsFor.
-    *
-    * \param a the first argument
-    * \param b the second argument
-    * \param c the third argument
-    * \param d the fourth argument
-    */
-   virtual bool holdsFor(const A& a, const B& b, const C& c, const D& d) = 0;
+      /**
+       * \copybrief Property::holdsFor
+       *
+       * 4-argument counterpart of Property::holdsFor.
+       *
+       * \param a the first argument
+       * \param b the second argument
+       * \param c the third argument
+       * \param d the fourth argument
+       */
+      virtual bool holdsFor(const A& a, const B& b, const C& c, const D& d)
+         = 0;
 
-   /**
-    * \copybrief Property::isTrivialFor
-    *
-    * 4-argument counterpart of Property::isTrivialFor.
-    *
-    * \param a the first argument
-    * \param b the second argument
-    * \param c the third argument
-    * \param d the fourth argument
-    */
-   virtual bool isTrivialFor(const A& a, const B& b, const C& c, const D& d);
+      /**
+       * \copybrief Property::isTrivialFor
+       *
+       * 4-argument counterpart of Property::isTrivialFor.
+       *
+       * \param a the first argument
+       * \param b the second argument
+       * \param c the third argument
+       * \param d the fourth argument
+       */
+      virtual bool isTrivialFor(const A& a, const B& b, const C& c,
+                                const D& d);
 
-   bool _accepts(const A& a, const B& b, const C& c, const D& d,
-                 const Unit& e);
+      bool _accepts(const A& a, const B& b, const C& c, const D& d,
+                    const Unit& e);
 
-   const std::string _classify(const A& a, const B& b, const C& c, const D& d,
-                               const Unit& e);
+      const std::string _classify(const A& a, const B& b, const C& c,
+                                  const D& d, const Unit& e);
 
-   void _generateInput(size_t n, A& a, B& b, C& c, D& d, Unit& e);
+      void _generateInput(size_t n, A& a, B& b, C& c, D& d, Unit& e);
 
-   bool _holdsFor(const A& a, const B& b, const C& c, const D& d,
-                  const Unit& e);
+      bool _holdsFor(const A& a, const B& b, const C& c, const D& d,
+                     const Unit& e);
 
-   bool _isTrivialFor(const A& a, const B& b, const C& c, const D& d,
-                      const Unit& e);
+      bool _isTrivialFor(const A& a, const B& b, const C& c, const D& d,
+                         const Unit& e);
 
 };
 
@@ -971,82 +977,82 @@ class Property<A, B> : public PropertyBase<A, B, Unit, Unit, Unit> {
 
    public:
 
-   /**
-    * \copybrief Property::addFixed
-    *
-    * 2-argument counterpart of Property::addFixed.
-    *
-    * \param a the first argument of the test case
-    * \param b the second argument of the test case
-    */
-   virtual void addFixed(const A& a, const B& b);
+      /**
+       * \copybrief Property::addFixed
+       *
+       * 2-argument counterpart of Property::addFixed.
+       *
+       * \param a the first argument of the test case
+       * \param b the second argument of the test case
+       */
+      virtual void addFixed(const A& a, const B& b);
 
    private:
 
-   /**
-    * \copybrief Property::accepts
-    *
-    * 2-argument counterpart of Property::accepts.
-    *
-    * \param a the first argument
-    * \param b the second argument
-    */
-   virtual bool accepts(const A& a, const B& b);
+      /**
+       * \copybrief Property::accepts
+       *
+       * 2-argument counterpart of Property::accepts.
+       *
+       * \param a the first argument
+       * \param b the second argument
+       */
+      virtual bool accepts(const A& a, const B& b);
 
-   /**
-    * \copybrief Property::classify
-    *
-    * 2-argument counterpart of Property::classify.
-    *
-    * \param a the first argument
-    * \param b the second argument
-    */
-   virtual const std::string classify(const A& a, const B& b);
+      /**
+       * \copybrief Property::classify
+       *
+       * 2-argument counterpart of Property::classify.
+       *
+       * \param a the first argument
+       * \param b the second argument
+       */
+      virtual const std::string classify(const A& a, const B& b);
 
-   /**
-    * \copybrief Property::generateInput
-    *
-    * 2-argument counterpart of Property::generateInput.
-    *
-    * \param n the size hint
-    * \param a the first argument
-    * \param b the second argument
-    */
-   virtual void generateInput(size_t n, A& a, B& b);
+      /**
+       * \copybrief Property::generateInput
+       *
+       * 2-argument counterpart of Property::generateInput.
+       *
+       * \param n the size hint
+       * \param a the first argument
+       * \param b the second argument
+       */
+      virtual void generateInput(size_t n, A& a, B& b);
 
-   /**
-    * \copybrief Property::holdsFor
-    *
-    * 2-argument counterpart of Property::holdsFor.
-    *
-    * \param a the first argument
-    * \param b the second argument
-    */
-   virtual bool holdsFor(const A& a, const B& b) = 0;
+      /**
+       * \copybrief Property::holdsFor
+       *
+       * 2-argument counterpart of Property::holdsFor.
+       *
+       * \param a the first argument
+       * \param b the second argument
+       */
+      virtual bool holdsFor(const A& a, const B& b) = 0;
 
-   /**
-    * \copybrief Property::isTrivialFor
-    *
-    * 2-argument counterpart of Property::isTrivialFor.
-    *
-    * \param a the first argument
-    * \param b the second argument
-    */
-   virtual bool isTrivialFor(const A& a, const B& b);
+      /**
+       * \copybrief Property::isTrivialFor
+       *
+       * 2-argument counterpart of Property::isTrivialFor.
+       *
+       * \param a the first argument
+       * \param b the second argument
+       */
+      virtual bool isTrivialFor(const A& a, const B& b);
 
-   bool _accepts(const A& a, const B& b, const Unit& c, const Unit& d,
-                 const Unit& e);
+      bool _accepts(const A& a, const B& b, const Unit& c, const Unit& d,
+                    const Unit& e);
 
-   const std::string _classify(const A& a, const B& b, const Unit& c,
-                               const Unit& d, const Unit& e);
+      const std::string _classify(const A& a, const B& b, const Unit& c,
+                                  const Unit& d, const Unit& e);
 
-   void _generateInput(size_t n, A& a, B& b, Unit& c, Unit& d, Unit& e);
+      void _generateInput(size_t n, A& a, B& b, Unit& c, Unit& d, Unit& e);
 
-   bool _holdsFor(const A& a, const B& b, const Unit& c, const Unit& d,
-                  const Unit& e);
+      bool _holdsFor(const A& a, const B& b, const Unit& c, const Unit& d,
+                     const Unit& e);
 
-   bool _isTrivialFor(const A& a, const B& b, const Unit& c, const Unit& d,
-                      const Unit& e);
+      bool _isTrivialFor(const A& a, const B& b, const Unit& c, const Unit& d,
+                         const Unit& e);
 
 };
 
@@ -1126,76 +1132,76 @@ class Property<A> : public PropertyBase<A, Unit, Unit, Unit, Unit> {
 
    public:
 
-   /**
-    * \copybrief Property::addFixed
-    *
-    * 1-argument counterpart of Property::addFixed.
-    *
-    * \param a the first argument of the test case
-    */
-   virtual void addFixed(const A& a);
+      /**
+       * \copybrief Property::addFixed
+       *
+       * 1-argument counterpart of Property::addFixed.
+       *
+       * \param a the first argument of the test case
+       */
+      virtual void addFixed(const A& a);
 
    private:
 
-   /**
-    * \copybrief Property::accepts
-    *
-    * 1-argument counterpart of Property::accepts.
-    *
-    * \param a the only argument
-    */
-   virtual bool accepts(const A& a);
+      /**
+       * \copybrief Property::accepts
+       *
+       * 1-argument counterpart of Property::accepts.
+       *
+       * \param a the only argument
+       */
+      virtual bool accepts(const A& a);
 
-   /**
-    * \copybrief Property::classify
-    *
-    * 1-argument counterpart of Property::classify.
-    *
-    * \param a the only argument
-    */
-   virtual const std::string classify(const A& a);
+      /**
+       * \copybrief Property::classify
+       *
+       * 1-argument counterpart of Property::classify.
+       *
+       * \param a the only argument
+       */
+      virtual const std::string classify(const A& a);
 
-   /**
-    * \copybrief Property::generateInput
-    *
-    * 1-argument counterpart of Property::generateInput.
-    *
-    * \param n the size hint
-    * \param a the only argument
-    */
-   virtual void generateInput(size_t n, A& a);
+      /**
+       * \copybrief Property::generateInput
+       *
+       * 1-argument counterpart of Property::generateInput.
+       *
+       * \param n the size hint
+       * \param a the only argument
+       */
+      virtual void generateInput(size_t n, A& a);
 
-   /**
-    * \copybrief Property::holdsFor
-    *
-    * 1-argument counterpart of Property::holdsFor.
-    *
-    * \param a the only argument
-    */
-   virtual bool holdsFor(const A& a) = 0;
+      /**
+       * \copybrief Property::holdsFor
+       *
+       * 1-argument counterpart of Property::holdsFor.
+       *
+       * \param a the only argument
+       */
+      virtual bool holdsFor(const A& a) = 0;
 
-   /**
-    * \copybrief Property::isTrivialFor
-    *
-    * 1-argument counterpart of Property::isTrivialFor.
-    *
-    * \param a the only argument
-    */
-   virtual bool isTrivialFor(const A& a);
+      /**
+       * \copybrief Property::isTrivialFor
+       *
+       * 1-argument counterpart of Property::isTrivialFor.
+       *
+       * \param a the only argument
+       */
+      virtual bool isTrivialFor(const A& a);
 
-   bool _accepts(const A& a, const Unit& b, const Unit& c, const Unit& d,
-                 const Unit& e);
+      bool _accepts(const A& a, const Unit& b, const Unit& c, const Unit& d,
+                    const Unit& e);
 
-   const std::string _classify(const A& a, const Unit& b, const Unit& c,
-                               const Unit& d, const Unit& e);
+      const std::string _classify(const A& a, const Unit& b, const Unit& c,
+                                  const Unit& d, const Unit& e);
 
-   void _generateInput(size_t n, A& a, Unit& b, Unit& c, Unit& d, Unit& e);
+      void _generateInput(size_t n, A& a, Unit& b, Unit& c, Unit& d, Unit& e);
 
-   bool _holdsFor(const A& a, const Unit& b, const Unit& c, const Unit& d,
-                  const Unit& e);
+      bool _holdsFor(const A& a, const Unit& b, const Unit& c, const Unit& d,
+                     const Unit& e);
 
-   bool _isTrivialFor(const A& a, const Unit& b, const Unit& c, const Unit& d,
-                      const Unit& e);
+      bool _isTrivialFor(const A& a, const Unit& b, const Unit& c,
+                         const Unit& d, const Unit& e);
 
 };
 
