@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009  Cyril Soldani
+ * Copyright (C) 2009-2012  Cyril Soldani
  * 
  * This file is part of QuickCheck++.
  * 
@@ -551,7 +551,7 @@ template<class A, class B, class C, class D, class E>
 void Property<A, B, C, D, E>::addFixed(const A& a, const B& b, const C& c,
                                        const D& d, const E& e)
 {
-   _addFixed(a, b, c, d, e);
+   this->_addFixed(a, b, c, d, e);
 }
 
 template<class A, class B, class C, class D, class E>
@@ -733,7 +733,7 @@ template<class A, class B, class C, class D>
 void Property<A, B, C, D>::addFixed(const A& a, const B& b, const C& c,
                                     const D& d)
 {
-   _addFixed(a, b, c, d, UNIT);
+   this->_addFixed(a, b, c, d, UNIT);
 }
 
 template<class A, class B, class C, class D>
@@ -901,7 +901,7 @@ class Property<A, B, C> : public PropertyBase<A, B, C, Unit, Unit> {
 template<class A, class B, class C>
 void Property<A, B, C>::addFixed(const A& a, const B& b, const C& c)
 {
-   _addFixed(a, b, c, UNIT, UNIT);
+   this->_addFixed(a, b, c, UNIT, UNIT);
 }
 
 template<class A, class B, class C>
@@ -1059,7 +1059,7 @@ class Property<A, B> : public PropertyBase<A, B, Unit, Unit, Unit> {
 template<class A, class B>
 void Property<A, B>::addFixed(const A& a, const B& b)
 {
-   _addFixed(a, b, UNIT, UNIT, UNIT);
+   this->_addFixed(a, b, UNIT, UNIT, UNIT);
 }
 
 template<class A, class B>
@@ -1208,7 +1208,7 @@ class Property<A> : public PropertyBase<A, Unit, Unit, Unit, Unit> {
 template<class A>
 void Property<A>::addFixed(const A& a)
 {
-   _addFixed(a, UNIT, UNIT, UNIT, UNIT);
+   this->_addFixed(a, UNIT, UNIT, UNIT, UNIT);
 }
 
 template<class A>
