@@ -52,7 +52,8 @@ template<class A>
 A generateInRange(A low, A high)
 {
    assert(low <= high);
-   A offset = static_cast<A>(double(rand()) / RAND_MAX * (high - low + 1));
+   A offset = static_cast<A>(double(rand()) / RAND_MAX
+                             * (double(high) - double(low) + 1));
    return static_cast<A>(low + offset);
 }
 
@@ -234,7 +235,7 @@ static inline void generate(size_t n, float& out)
  */
 static inline void generate(size_t n, double& out)
 {
-   out = double(rand()) / RAND_MAX * 2 * n - n;
+   out = double(rand()) / RAND_MAX * 2 * double(n) - double(n);
 }
 
 /**
