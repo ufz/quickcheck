@@ -33,8 +33,7 @@
 
 - \ref introduction
   - \ref what
-  - \ref why "Why Should I Use It?"
-  - \ref why2 "Why Would I Want to Use It?"
+  - \ref why "Why Would I Want to Use It?"
   - \ref how "How to Get It?"
   - \ref relation
   - \ref license
@@ -60,7 +59,7 @@
 \subsection what What is QuickCheck++
 
 QuickCheck++ is a tool for testing C++ programs automatically, inspired by
-<a href="http://www.cs.chalmers.se/~rjmh/QuickCheck/">QuickCheck</a>, a
+<a href="http://www.cse.chalmers.se/~rjmh/QuickCheck/">QuickCheck</a>, a
 similar library for Haskell programs.
 
 In QuickCheck++, the application programmer provides a specification of parts
@@ -76,20 +75,11 @@ and to write custom test data generators.
 The framework also allows the specification of \ref fixed "fixed test data", as
 can be done with more traditional unit testing frameworks.
 
-\warning QuickCheck++ is experimental, best-effort project. It comes with
-absolutely no warranty, see \ref license for detail. It is subject to change
-and should not be relied on at the present time, except if you are perfectly
-happy with current version.
+\warning QuickCheck++ has been around since a few years now, but should still
+be considered an experimental, best-effort project. It comes with absolutely no
+warranty, see \ref license for detail.
 
-\warning In fact, it has not even be tested seriously in our own code. The only
-reason we release QuickCheck++ in such a preliminary state is that we are
-willing to benefit from comments, improvements and extensions.
-
-\subsection why Why Should I Use QuickCheck++?
-
-You should \b not, see warning above.
-
-\subsection why2 Why Would I Want to Use QuickCheck++?
+\subsection why Why Would I Want to Use QuickCheck++?
 
 Because you believe in test-driven development to provide better-designed,
 more robust, self-documented software. Moreover, you like:
@@ -103,7 +93,7 @@ more robust, self-documented software. Moreover, you like:
 \subsection how How to Get QuickCheck++?
 
 Last released version of QuickCheck++ is available from
-http://software.legiasoft.com/archives/quickcheck_0.0.1.tar.bz2 while current
+http://software.legiasoft.com/archives/quickcheck_0.0.3.tar.bz2 while current
 development version is available through \c git:
 
 \verbatim
