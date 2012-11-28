@@ -66,6 +66,7 @@ void printArgument(std::ostream& out, size_t n, const A& a)
  * Specialisation of #printArgument for \c Unit. Prints nothing.
  */
 template<>
+inline
 void printArgument(std::ostream&, size_t, const Unit&) { }
 
 /**
