@@ -99,7 +99,7 @@ A generateInteger(size_t n)
    A max = std::numeric_limits<A>::max();
    A min = std::numeric_limits<A>::min();
    A high = (n > size_t(max)) ? max : A(n);
-   A low = (n > size_t(-min)) ? min : A(-n);
+   A low = (n > -size_t(min)) ? min : A(-n);
    // generates integer in clipped interval
    return generateInRange(low, high);
 }
